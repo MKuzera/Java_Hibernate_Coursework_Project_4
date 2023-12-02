@@ -18,9 +18,9 @@ public class Database {
 
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(QUERY);) {
-            // Extract data from result set
+
             while (rs.next()) {
-                // Retrieve by column name
+
                 System.out.print("ID: " + rs.getInt("id"));
                 System.out.print(", First: " + rs.getString("first"));
                 System.out.println(", Last: " + rs.getString("last"));
@@ -30,11 +30,7 @@ public class Database {
         }
 
 
-//        try {
-//            Class.forName("jdbc:mysql://localhost:3306/bazaProbna");
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
+
 
     }
 
