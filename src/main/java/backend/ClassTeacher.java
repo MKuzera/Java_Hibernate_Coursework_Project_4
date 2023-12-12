@@ -11,6 +11,10 @@ import java.util.*;
 @Entity
 @Table (name = "teacherclasses")
 public class ClassTeacher {
+    public int getId() {
+        return id;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
