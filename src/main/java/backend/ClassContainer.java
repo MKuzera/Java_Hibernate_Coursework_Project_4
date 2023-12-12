@@ -15,6 +15,9 @@ public class ClassContainer {
         ClassTeacher classTeacher = new ClassTeacher(groupName, capacity);
         container.put(groupName,classTeacher);
     }
+    public void addClass(ClassTeacher classTeacher){
+        container.put(classTeacher.getGroupName() ,classTeacher);
+    }
     public void removeClass(String groupName){
         container.remove(groupName);
     }

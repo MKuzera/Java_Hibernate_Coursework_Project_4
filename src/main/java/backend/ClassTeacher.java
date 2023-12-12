@@ -5,45 +5,51 @@ package backend;
 import backend.Exceptions.MaxTeacherNumber;
 import backend.Exceptions.TeacherNotFound;
 import backend.Exceptions.ThisTeacherExists;
+import jakarta.persistence.*;
 
 import java.util.*;
-
+@Entity
+@Table (name = "teacherclasses")
 public class ClassTeacher {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String groupName;
-    private ArrayList<Teacher> teacherList;
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public Integer getMaxTeachers() {
-        return maxTeachers;
-    }
-
+    @OneToMany(mappedBy = "classTeacher", cascade = CascadeType.ALL)
+    private List<Teacher> teacherList;
     private Integer maxTeachers;
+    public ClassTeacher(){
+    }
 
     public ClassTeacher(String groupName, Integer maxTeachers) {
         this.groupName = groupName;
         this.maxTeachers = maxTeachers;
         teacherList = new ArrayList<>(maxTeachers);
     }
+
+    public String getGroupName() {
+        return groupName;
+    }
+    public Integer getMaxTeachers() {
+        return maxTeachers;
+    }
     public ArrayList<Teacher> getTeacherList(){
-        return teacherList;
+        return (ArrayList<Teacher>) teacherList;
     }
 
     public void addTeacher(Teacher teacher) throws ThisTeacherExists, MaxTeacherNumber {
-        if(teacherList.size() == maxTeachers){
+        if (teacherList.size() == maxTeachers) {
             throw new MaxTeacherNumber("Max teacher number! Can't add any more teachers");
         }
-        Iterator<Teacher> iterator;
-        iterator = teacherList.iterator();
-        while(iterator.hasNext()){
-            Teacher teacher1 = iterator.next();
-            if(teacher1.equals(teacher)){
+
+        for (Teacher existingTeacher : teacherList) {
+            if (existingTeacher.equals(teacher)) {
                 throw new ThisTeacherExists("This teacher exists");
             }
         }
+
         teacherList.add(teacher);
+        teacher.setClassTeacher(this);
     }
 
     public void addSalary(Teacher teacher, Double salary) throws TeacherNotFound {
@@ -121,13 +127,14 @@ public class ClassTeacher {
         return counter;
     }
     public void summary(){
+        System.out.println("Class: " + groupName + " max size: " + maxTeachers + " current% = " + (double)teacherList.size()/(double)maxTeachers * 100.0 + "%");
         for (Teacher teacher: teacherList) {
             System.out.println(teacher.toString());
         }
     }
 
     public List<Teacher> sortByLastName(){
-        ArrayList<Teacher> teachers = teacherList;
+        ArrayList<Teacher> teachers = (ArrayList<Teacher>) teacherList;
         teachers.sort(new Comparator<Teacher>() {
             @Override
             public int compare(Teacher o1, Teacher o2) {
@@ -139,7 +146,7 @@ public class ClassTeacher {
     }
 
     public List<Teacher> sortBySalary(){
-        ArrayList<Teacher> teachers = teacherList;
+        ArrayList<Teacher> teachers = (ArrayList<Teacher>) teacherList;
         teachers.sort(new Comparator<Teacher>() {
             @Override
             public int compare(Teacher o1, Teacher o2) {

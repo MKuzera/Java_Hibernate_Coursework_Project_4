@@ -1,14 +1,34 @@
 package backend;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
+@Table(name = "teachers")
 public class Teacher implements Comparable<Teacher> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String firstName;
     private String lastName;
     private Date yearOfBirth;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "teacherCondition")
     private TeacherCondition teacherCondition;
     private Double salary;
+
+    public void setClassTeacher(ClassTeacher classTeacher) {
+        this.classTeacher = classTeacher;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "classTeacher_id")
+    private ClassTeacher classTeacher;
+
+    public Teacher() {
+    }
 
     public void setSalary(Double salary) {
         this.salary = salary;
@@ -26,10 +46,19 @@ public class Teacher implements Comparable<Teacher> {
         this.salary = salary;
     }
 
+    public Teacher(String firstName, String lastName, Date yearOfBirth, String teacherCondition, Double salary) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.yearOfBirth = yearOfBirth;
+        this.teacherCondition = TeacherCondition.valueOf(teacherCondition);
+        this.salary = salary;
+    }
+
     @Override
     public String toString() {
         return "Teacher{" +
                 "firstName='" + firstName + '\'' +
+                ", id='" + id + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", yearOfBirth=" + yearOfBirth +
                 ", teacherCondition=" + teacherCondition +
@@ -63,6 +92,10 @@ public class Teacher implements Comparable<Teacher> {
         if (o == null || getClass() != o.getClass()) return false;
         Teacher teacher = (Teacher) o;
         return Objects.equals(firstName, teacher.firstName) && Objects.equals(lastName, teacher.lastName);
+    }
+
+    public int getId() {
+        return id;
     }
 
     @Override
