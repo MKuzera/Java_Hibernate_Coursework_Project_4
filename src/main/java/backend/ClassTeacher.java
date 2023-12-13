@@ -5,6 +5,7 @@ package backend;
 import backend.Exceptions.MaxTeacherNumber;
 import backend.Exceptions.TeacherNotFound;
 import backend.Exceptions.ThisTeacherExists;
+import db.Rate;
 import jakarta.persistence.*;
 
 import java.util.*;
@@ -18,6 +19,11 @@ public class ClassTeacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @OneToMany(mappedBy = "classTeacher", cascade = CascadeType.ALL)
+    private List<Rate> rates;
+
+
     private String groupName;
     @OneToMany(mappedBy = "classTeacher", cascade = CascadeType.ALL)
     private List<Teacher> teacherList;
@@ -40,6 +46,10 @@ public class ClassTeacher {
     public ArrayList<Teacher> getTeacherList(){
         return (ArrayList<Teacher>) teacherList;
     }
+    public List<Teacher> getTeacherListV(){
+        return  teacherList;
+    }
+
 
     public void addTeacher(Teacher teacher) throws ThisTeacherExists, MaxTeacherNumber {
         if (teacherList.size() == maxTeachers) {
@@ -56,6 +66,13 @@ public class ClassTeacher {
         teacher.setClassTeacher(this);
     }
 
+    public void addRate(Rate rate){
+        if (rates == null) {
+            rates = new ArrayList<>();
+        }
+        rate.setClassTeacher(this);
+        rates.add(rate);
+    }
     public void addSalary(Teacher teacher, Double salary) throws TeacherNotFound {
         Iterator<Teacher> iterator;
         iterator = teacherList.iterator();
@@ -131,7 +148,7 @@ public class ClassTeacher {
         return counter;
     }
     public void summary(){
-        System.out.println("Class: " + groupName + " max size: " + maxTeachers + " current% = " + (double)teacherList.size()/(double)maxTeachers * 100.0 + "%");
+        System.out.println("ID:"+ id+" Class: " + groupName + " max size: " + maxTeachers + " current% = " + (double)teacherList.size()/(double)maxTeachers * 100.0 + "%");
         for (Teacher teacher: teacherList) {
             System.out.println(teacher.toString());
         }

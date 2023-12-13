@@ -27,6 +27,8 @@ public class Teacher implements Comparable<Teacher> {
     @JoinColumn(name = "classTeacher_id")
     private ClassTeacher classTeacher;
 
+
+
     public Teacher() {
     }
 
@@ -57,8 +59,8 @@ public class Teacher implements Comparable<Teacher> {
     @Override
     public String toString() {
         return "Teacher{" +
-                "firstName='" + firstName + '\'' +
                 ", id='" + id + '\'' +
+                "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", yearOfBirth=" + yearOfBirth +
                 ", teacherCondition=" + teacherCondition +
