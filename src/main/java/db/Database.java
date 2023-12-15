@@ -317,6 +317,35 @@ public class Database {
 
     }
 
+    static public void szukajPoNazwisku(String nazwisko){
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Teacher> criteriaQuery = criteriaBuilder.createQuery(Teacher.class);
+            Root<Teacher> teacherRoot = criteriaQuery.from(Teacher.class);
+
+
+            criteriaQuery.where(criteriaBuilder.like(teacherRoot.get("lastName"), nazwisko));
+
+            criteriaQuery.select(teacherRoot).distinct(true);
+
+            List<Teacher> teachers = entityManager.createQuery(criteriaQuery).getResultList();
+
+            for (Teacher teacher : teachers) {
+                System.out.println("Teacher: " + teacher.getFirstName() + " " + teacher.getLastName());
+
+            }
+        }
+        catch(Exception e){
+            System.out.println(e);
+
+        }finally {
+            entityManager.close();
+            entityManagerFactory.close();
+        }
+
+    }
     static public void dodajRate(int idKlasy, Rate rate) throws Exception {
         if (!checkIfClassTeacherExists(idKlasy)) {
             throw new Exception("No class of that id");

@@ -54,7 +54,7 @@ public class Main {
                     break;
                 case 3:
                     // dodaj nowa klase
-                    Database.addClassTeacherToClassTeachers("Klasa 5",5);
+                    Database.addClassTeacherToClassTeachers("Klasa 6",10);
                     break;
                 case 4:
                     // dodaj nauczyciela do grupy
@@ -143,6 +143,11 @@ public class Main {
                     // srednia salary na grupe
                     Database.displayAverageRateByGroup();
                     break;
+                case 15:
+                    // szukaj osobe po naziwsko
+                    Database.szukajPoNazwisku("Doe");
+                    break;
+
                 default:
                     loop = false;
                     break;
@@ -173,6 +178,7 @@ public class Main {
                 "\n11 - Dodaj Rate"+
                 "\n12 - Uzycie Criteria wyswietl"+
                 "\n13 - Uzycie Criteria average salary per class"+
-                "\n14 - Uzycie Criteria average rate per class";
+                "\n14 - Uzycie Criteria average rate per class"+
+                "\n15 - Search teacher by lastName";
     }
 }
